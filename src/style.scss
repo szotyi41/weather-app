@@ -1,0 +1,145 @@
+$backgroundColor: #eee;
+$boxShadow: 10px 10px 25px 10px rgba(0,0,0,0.25);
+$defaultGradient: linear-gradient(120deg, rgba(242,81,149,1) 0%, rgba(253,187,45,1) 100%);
+$fontPrimary: 'Open Sans', sans-serif;
+$colorFontPrimary: #fff;
+$colorFontSecondary: #666; 
+
+$fontSizeDate: 24px;
+$fontSizeLocale: 24px;
+$fontSizeTemp: 128px;
+$fontSizeUnit: 18px;
+$fontSizeHeader: 18px;
+
+html, body {
+    background-color: $backgroundColor;
+    font-family: $fontPrimary;
+}
+
+.weather-card:hover {
+    transform: scale(1.05);
+}
+
+
+
+.weather-card {
+    display: flex;
+    overflow: hidden;
+    border-radius: 8px;
+    width: 300px;
+    height: 600px;
+    margin: 32px;
+    -webkit-box-shadow: $boxShadow;
+    -moz-box-shadow: $boxShadow;
+    box-shadow: $boxShadow;
+    transition: all 0.3s;
+    background-color: $backgroundColor;
+
+    .weather-card-leftside {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        min-width: 300px;
+        max-width: 300px;
+        cursor: pointer;
+        background: rgb(242,81,149);
+        background: $defaultGradient;
+        color: $colorFontPrimary;
+
+        .container {
+
+            margin: 48px 32px 48px 32px;
+
+            .date { 
+                font-size: $fontSizeDate;
+                font-weight: 300;
+            }
+    
+            .locale {
+                font-size: $fontSizeLocale;
+                font-weight: 300;
+            }
+
+            .temp {
+                font-size: $fontSizeTemp;
+                font-weight: bold;
+            }
+
+            .unit {
+                font-size: $fontSizeUnit;
+                font-weight: normal;
+            }
+
+        }
+
+    }
+
+    .weather-card-rightside {
+
+        display: none;
+        opacity: 0;
+        color: $colorFontSecondary;
+
+        .container {
+
+            margin: 48px 32px 48px 32px;
+
+            .header {
+                display: flex;
+                justify-content: space-between;
+                border-bottom: 1px solid $colorFontSecondary;
+                padding-bottom: 8px;
+                width: 100%;
+                font-weight: 300;
+
+                h1 {
+                    font-size: $fontSizeHeader;
+                    font-weight: 300;
+                    margin: 0;
+                }
+
+                .close-button {
+                    position: relative;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    color: $colorFontSecondary;
+                }
+
+                .close-button:hover {
+                    cursor: pointer;
+                    color: $colorFontPrimary;
+                    background-color: $colorFontSecondary;
+                }
+
+                .close-button:before {
+                    position: absolute;
+                    content: '\2715';
+                    width: 24px;
+                    height: 24px;
+                    vertical-align: middle;
+                    text-align: center;
+                    top: 1px;
+                }
+            }
+
+        }
+
+    }
+}
+
+.weather-card.opened {
+    width: 800px;
+
+    .weather-card-leftside { 
+        width: 35%; 
+        cursor: default;
+    }
+
+    .weather-card-rightside { 
+        display: block;
+        opacity: 1;
+        width: 65%; 
+    }
+}
