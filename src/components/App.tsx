@@ -3,6 +3,8 @@ import Loadingbar from './Loadingbar'
 import WeatherCard, { ForecastInterface } from './WeatherCard'
 import WeatherCardCreate from './WeatherCardCreate'
 
+import ApiAuth from './../api_key.json'
+
 export interface AppStateInterface {
     locations: Array<String>,
     forecasts: Array<ForecastResponseInterface>,
@@ -42,7 +44,7 @@ export default class App extends React.Component<{}, AppStateInterface> {
         this.state = {
             locations: ['Budapest', 'London'],
             forecasts: [],
-            api_key: '9d7c3c613f7362eca3f5c988f71e9d87',
+            api_key: ApiAuth.api_key.toString(),
             units: 'metric'
         }
     }

@@ -13772,6 +13772,17 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./src/api_key.json":
+/*!**************************!*\
+  !*** ./src/api_key.json ***!
+  \**************************/
+/*! exports provided: api_key, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"api_key\":\"9d7c3c613f7362eca3f5c988f71e9d87\"}");
+
+/***/ }),
+
 /***/ "./src/components/App.tsx":
 /*!********************************!*\
   !*** ./src/components/App.tsx ***!
@@ -13789,6 +13800,7 @@ const react_1 = __importDefault(__webpack_require__(/*! react */ "react"));
 const Loadingbar_1 = __importDefault(__webpack_require__(/*! ./Loadingbar */ "./src/components/Loadingbar.tsx"));
 const WeatherCard_1 = __importDefault(__webpack_require__(/*! ./WeatherCard */ "./src/components/WeatherCard.tsx"));
 const WeatherCardCreate_1 = __importDefault(__webpack_require__(/*! ./WeatherCardCreate */ "./src/components/WeatherCardCreate.tsx"));
+const api_key_json_1 = __importDefault(__webpack_require__(/*! ./../api_key.json */ "./src/api_key.json"));
 class App extends react_1.default.Component {
     constructor(props) {
         super(props);
@@ -13810,7 +13822,7 @@ class App extends react_1.default.Component {
         this.state = {
             locations: ['Budapest', 'London'],
             forecasts: [],
-            api_key: '9d7c3c613f7362eca3f5c988f71e9d87',
+            api_key: api_key_json_1.default.api_key.toString(),
             units: 'metric'
         };
     }
