@@ -1,28 +1,92 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import Loadingbar from './Loadingbar'
-import WeatherCard from './WeatherCard'
+import WeatherCard, { ForecastInterface } from './WeatherCard'
+import WeatherCardCreate from './WeatherCardCreate'
 
+export interface AppStateInterface {
+    locations: Array<String>,
+    forecasts: Array<ForecastResponseInterface>,
+    api_key: String,
+    units: String
+}
 
-export default class App extends React.Component {
+export interface LocationInterface {
+    id: Number;
+    name: String;
+    coord: Object;
+    country: String;
+    sunrise: Number;
+    sunset: Number;
+    timezone: Number;
+    population: Number;
+}
 
-    async componentDidMount() {
-        const weather = await fetch('http://samples.openweathermap.org/data/2.5/weather?q=London&appid=9d7c3c613f7362eca3f5c988f71e9d87', {
-            method: 'GET',
-            headers: {
-                'Access-Control-Allow-Origin': 'http://samples.openweathermap.org/',
-                'Access-Control-Allow-Methods': '*',
-                'Content-Type': 'application/json',
-            }
-        }).then(response => response.json())
-        .then(response => console.log(response))
+export interface ForecastResponseInterface {
+    cod: String;
+    city: LocationInterface;
+    list: Array<ForecastInterface>;
+}
+
+export default class App extends React.Component<{}, AppStateInterface> {
+
+    loadingbar: React.RefObject<Loadingbar>;
+    cardcreate: React.RefObject<WeatherCardCreate>;
+
+    constructor(props: any) {
+
+        super(props)
+
+        this.loadingbar = React.createRef();
+        this.cardcreate = React.createRef();
+
+        this.state = {
+            locations: ['Budapest', 'London'],
+            forecasts: [],
+            api_key: '9d7c3c613f7362eca3f5c988f71e9d87',
+            units: 'metric'
+        }
+    }
+
+    componentDidMount() {
+        this.state.locations.forEach(location => this.getWeather(location))
+    }
+
+    getWeather = (locationName: String) => {
+        this.loadingbar.current.start()
+        fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${locationName}&units=${this.state.units}&appid=${this.state.api_key}`, {method: 'GET'})
+            .then((response: Response) => response.json())
+            .then((response: ForecastResponseInterface) => {
+                this.setState({ forecasts: this.state.forecasts.concat(response) })
+                this.loadingbar.current.completed()
+            })
+    }
+
+    addLocation = (locationName: String) => {
+        this.setState({ locations: this.state.locations.concat(locationName) })
+        this.getWeather(locationName)
     }
 
     render() {
+
+        const units: {[key: string]: String} = {
+            default: 'Kelvin',
+            metric: 'Celsius',
+            imperial: 'Fahrenheit'
+        }
+
+        const unit: String = units[this.state.units.toString()]
+
         return (
             <div>
-                <Loadingbar/>
+                <Loadingbar ref={this.loadingbar}/>
 
-                <WeatherCard></WeatherCard>
+                <div className="weather-cards">
+                    {this.state.forecasts.map((forecast: ForecastResponseInterface, index: Number) => 
+                        <WeatherCard forecast={forecast} unit={unit} key={Number(index)} />
+                    )}
+    
+                    <WeatherCardCreate ref={this.cardcreate} addLocation={this.addLocation}></WeatherCardCreate>
+                </div>
             </div>
         )
     }

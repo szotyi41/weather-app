@@ -1,17 +1,27 @@
 import React from 'react'
 
-export default class Loadingbar extends React.Component {
+export interface LoadingbarStateInterface {
+    value: Number
+}
+
+export default class Loadingbar extends React.Component<{}, LoadingbarStateInterface> {
+
+    constructor(props: any) {
+
+        super(props)
+
+        this.state = {
+            value: 0
+        }
+    }
+
+    start = () => this.setState((state) => ({ value: Number(state.value) + 1 }))
+    completed = () => this.setState((state) => ({ value: Number(state.value) - 1 }))
 
     render() {
 
         const loadingBarStyle: React.CSSProperties = {
-            position: 'absolute',
-            backgroundColor: 'rgba(0,212,255,1)',
-            left: 0,
-            top: 0,
-            width: '100vw',
-            height: '4px',
-            transition: 'all 0.3s'
+            width: this.state.value <= 0 ? 0 : (100 / Number(this.state.value)) + 'vw',
         }
 
         return (

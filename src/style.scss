@@ -1,42 +1,106 @@
 $backgroundColor: #eee;
 $boxShadow: 10px 10px 25px 10px rgba(0,0,0,0.25);
+$defaultColor: rgba(242,81,149,1);
 $defaultGradient: linear-gradient(120deg, rgba(242,81,149,1) 0%, rgba(253,187,45,1) 100%);
 $fontPrimary: 'Open Sans', sans-serif;
 $colorFontPrimary: #fff;
 $colorFontSecondary: #666; 
+$borderRadius: 8px;
 
 $fontSizeDate: 24px;
 $fontSizeLocale: 24px;
 $fontSizeTemp: 128px;
 $fontSizeUnit: 18px;
 $fontSizeHeader: 18px;
+$fontSizeStatistic: 12px;
+$fontSizeForecast: 12px;
 
 html, body {
     background-color: $backgroundColor;
     font-family: $fontPrimary;
 }
 
+.loading-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 2px;
+    transition: opacity 1s ease-in, width 0.3s;
+    background: $defaultGradient;
+}
+
+.button-prm {
+    border-radius: $borderRadius;
+    width: 200px;
+    height: 32px;
+    border: 2px solid $defaultColor;
+    color: $defaultColor;
+    background: transparent;
+    transition: all 0.3s;
+    outline: none;
+}
+
+.button-prm:disabled {
+    color: $colorFontSecondary;
+    border-color: $colorFontSecondary;
+}
+
+.button-prm:not(:disabled):hover {
+    background: $defaultGradient;
+    border: 0px solid transparent;
+    cursor: pointer;
+    color: #fff;
+}
+
+.weather-cards {
+    display: flex;
+    white-space: nowrap;
+    overflow-x: auto;
+    height: 100vh;
+}
+
 .weather-card:hover {
     transform: scale(1.05);
 }
 
-
+.weather-card-outer {
+    display: inline-block;
+}
 
 .weather-card {
     display: flex;
     overflow: hidden;
-    border-radius: 8px;
+    position: relative;
+    border-radius: $borderRadius;
     width: 300px;
-    height: 600px;
-    margin: 32px;
+    height: calc(100vh - 128px);
+    margin: 64px 32px;
     -webkit-box-shadow: $boxShadow;
     -moz-box-shadow: $boxShadow;
     box-shadow: $boxShadow;
     transition: all 0.3s;
     background-color: $backgroundColor;
 
+    .location-select {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 200px;
+        z-index: 1;
+    }
+
+    .location-add-button {
+        position: absolute;
+        left: 50%;
+        top: calc(50% + 64px);
+        transform: translate(-50%, -50%);
+    }
+
     .weather-card-leftside {
         display: flex;
+        position: relative;
         flex-direction: column;
         justify-content: space-between;
         width: 100%;
@@ -46,17 +110,18 @@ html, body {
         background: rgb(242,81,149);
         background: $defaultGradient;
         color: $colorFontPrimary;
+        overflow: hidden;
 
         .container {
 
-            margin: 48px 32px 48px 32px;
+            margin: 32px;
 
             .date { 
                 font-size: $fontSizeDate;
                 font-weight: 300;
             }
     
-            .locale {
+            .location {
                 font-size: $fontSizeLocale;
                 font-weight: 300;
             }
@@ -71,6 +136,16 @@ html, body {
                 font-weight: normal;
             }
 
+            .icon {
+                position: absolute;
+                filter: brightness(0) invert(1);
+                width: 150%;
+                right: -140px;
+                top: 50%;
+                transform: translateY(-50%);
+                opacity: 0.5;
+            }
+
         }
 
     }
@@ -83,7 +158,10 @@ html, body {
 
         .container {
 
-            margin: 48px 32px 48px 32px;
+            display: flex;
+            flex-direction: column;
+            margin: 32px;
+            max-height: calc(100% - 64px);
 
             .header {
                 display: flex;
@@ -92,6 +170,7 @@ html, body {
                 padding-bottom: 8px;
                 width: 100%;
                 font-weight: 300;
+                margin-top: 16px;
 
                 h1 {
                     font-size: $fontSizeHeader;
@@ -124,11 +203,68 @@ html, body {
                 }
             }
 
+            .statistics {
+                display: flex;
+                justify-content: space-between;
+
+                .statistic {
+                    flex: 1 1 0px;
+
+                    .statistic-icon {
+                        opacity: 0.5;
+                        transition: opacity 0.3s;
+                    }
+
+                    .statistic-text {
+                        width: 100%;
+                        text-align: center;
+                        font-size: $fontSizeStatistic;
+                    }
+
+                }
+            }
+
+            .forecasts {
+
+                flex: 1 1;
+                overflow-y: auto;
+                margin-top: 12px;
+
+                table {
+                    table-layout: fixed;
+                    width: 100%;
+                }
+
+                .forecast {
+
+                    td {
+                        padding: 12px 0;
+                        font-size: $fontSizeForecast;
+                    }
+
+                    .forecast-time {
+                        text-align: left;
+                    }
+
+                    .forecast-weather {
+                        text-align: center;
+                    }
+
+                    .forecast-temp {
+                        text-align: right;
+                        color: $defaultGradient;
+                    }
+
+                }
+
+            }
+
         }
 
     }
 }
 
+/* Opened size */
 .weather-card.opened {
     width: 800px;
 
@@ -140,6 +276,6 @@ html, body {
     .weather-card-rightside { 
         display: block;
         opacity: 1;
-        width: 65%; 
+        width: 65%;
     }
 }
